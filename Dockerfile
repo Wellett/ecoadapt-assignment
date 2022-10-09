@@ -6,4 +6,4 @@ RUN pip install -r /requirements.txt
 COPY dev /dev
 COPY src /src
 
-CMD ["python3", "src/exporter-ecoadapt/exporter-ecoadapt.py"]
+CMD ["python3", "src/main.py"]
