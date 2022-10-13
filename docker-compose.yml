@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  sensor:
+    image: ecoadapt-sensor
+    command: python3 ./main.py
+    ports:
+      - 3000:3000
+    working_dir: /src
+    volumes:
+      - ./src/:/src
+
+  server:
+    image: ecoadapt-server:latest
+    command: python3 ./server.py
+    ports: 
+      - 9000:9000
+    working_dir: /src
+    volumes:
+      - ./dev/:/src
+
+
+
