@@ -4,6 +4,7 @@ services:
   sensor:
     image: ecoadapt-sensor
     command: python3 ./main.py
+    tty: true
     ports:
       - 3000:3000
     working_dir: /src
@@ -13,6 +14,7 @@ services:
   server:
     image: ecoadapt-server:latest
     command: python3 ./server.py
+    tty: true
     ports: 
       - 9000:9000
     working_dir: /src
