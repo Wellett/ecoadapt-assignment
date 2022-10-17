@@ -17,8 +17,36 @@ log.setLevel(logging.INFO)
 
 UNIT = 0x1
 ADDRESS = "169.254.20.1"
+SENSOR_PORT = 502
+
+# class for connecting to and using the ecoadapt modbus sensor
+class ecoadapt_modbus_sensor():
+    def __init__(self, address, port):
+        # initialise the sensor
+        log.info("Init modbus sensor")
+        client = ModbusClient(ADDRESS, port=SENSOR_PORT)
+        client.connect()
 
 
+    def read_sensor_information():
+        # read information from the sensor
+        resp = client.read_input_registers(0, 1, unit=UNIT)
+        version = resp.registers(1)
+
+        log.info("Software Version: %d", % .registers)
+
+
+    def sample(self):
+        # take a sample
+
+    def disconnect(self):
+        #gracefully disconnect from the sensor
+        log.info("Closing client")
+        client.close()
+
+
+# This is a quick script used to setup the sensor and read some registers 
+# Only called when this module is run as main
 def run_sync_client():
     log.info("Setting up client")
     client = ModbusClient(ADDRESS, port=502)
@@ -50,9 +78,9 @@ Output when ran:
 >> python3 ./src/exporter-ecoadapt/exporter-ecoadapt.py 
 2021-03-19 12:31:18,597 MainThread      INFO     exporter-ecoadapt:23       Setting up client
 2021-03-19 12:31:18,610 MainThread      INFO     exporter-ecoadapt:27       Reading registers
-2021-03-19 12:31:18,615 MainThread      INFO     exporter-ecoadapt:39       (0, 1): ReadRegisterResponse (1): [514]
-2021-03-19 12:31:18,622 MainThread      INFO     exporter-ecoadapt:39       (1, 1): ReadRegisterResponse (1): [2]
-2021-03-19 12:31:18,635 MainThread      INFO     exporter-ecoadapt:39       (2, 3): ReadRegisterResponse (3): [30, 44285, 17639]
+2021-03-19 12:31:18,615 MainThread      INFO     exporter-ecoadapt:39       (0, 1): ReadRegisterResponse (1): [514] #Note: this is the Software version 2.2
+2021-03-19 12:31:18,622 MainThread      INFO     exporter-ecoadapt:39       (1, 1): ReadRegisterResponse (1): [2]   #Note: this is the Modbus table version 2
+2021-03-19 12:31:18,635 MainThread      INFO     exporter-ecoadapt:39       (2, 3): ReadRegisterResponse (3): [30, 44285, 17639] #Note: this is the Mac Address...
 2021-03-19 12:31:18,643 MainThread      INFO     exporter-ecoadapt:39       (244, 12): ReadRegisterResponse (12): [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 2021-03-19 12:31:18,646 MainThread      INFO     exporter-ecoadapt:39       (352, 12): ReadRegisterResponse (12): [49709, 17262, 20887, 15905, 45177, 15748, 0, 0, 0, 0, 0, 0]
 2021-03-19 12:31:18,650 MainThread      INFO     exporter-ecoadapt:39       (388, 12): ReadRegisterResponse (12): [34030, 17262, 13400, 15907, 22707, 15748, 0, 0, 0, 0, 0, 0]
