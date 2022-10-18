@@ -28,13 +28,18 @@ class ecoadapt_modbus_sensor():
         client.connect()
 
 
-    def read_sensor_information():
+    def print_sensor_information():
         # read information from the sensor
         resp = client.read_input_registers(0, 1, unit=UNIT)
-        version = resp.registers(1)
+        version = split_uint16_to_bytes(resp.registers)
+        print("Software Version: %d.%d" % (version[0], version[1]))
 
-        log.info("Software Version: %d", % .registers)
+        resp = client.read_input_registers(1, 1, unit=UNIT)
+        print("Modbus table version: %d" % (resp.registers[0]))
 
+        resp = client.read_input_registers(2, 3, unit=UNIT)
+        mac = split_uint16_to_bytes(resp.registers)
+        print("Mac Address: %d.%d.%d.%d.%d.%d" % (mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]))
 
     def sample(self):
         # take a sample
@@ -44,6 +49,14 @@ class ecoadapt_modbus_sensor():
         log.info("Closing client")
         client.close()
 
+def split_uint16_to_bytes(array)
+    #splits an array of uint16 to an array of bytes
+    output = []
+    for element in array:
+        first = (element & 0xFF00) / 0x0100 #mask first byte
+        second = element & 0xFF
+        output += [first, second]
+    return output
 
 # This is a quick script used to setup the sensor and read some registers 
 # Only called when this module is run as main
